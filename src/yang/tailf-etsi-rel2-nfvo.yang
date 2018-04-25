@@ -8,14 +8,13 @@ module tailf-etsi-rel2-nfvo {
   include tailf-etsi-rel2-nfvo-ns {
     revision-date "2017-01-20";
   }
-  include tailf-etsi-rel2-nfvo-vnf {
-    revision-date "2017-01-20";
-  }
+  include tailf-etsi-rel2-nfvo-vnf;
 
-  organization "Tail-f Systems";
+  organization
+    "European Telecommunications Standards Institute (ETSI)";
 
   description
-    "";
+    "Network Function Virtualization Orchestrator";
 
   revision 2017-01-20 {
     description

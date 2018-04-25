@@ -118,10 +118,21 @@ submodule tailf-etsi-rel2-nfvo-common {
   grouping monitoring-parameter {
     leaf name {
       type string;
+      description
+        "Human readable name of the monitoring parameter.";
+      reference
+        "GS NFV IFA011: Section 7.1.11.3, MonitoringParameter
+         information element.";
     }
     leaf performance-metric {
       type string;
+      description
+        "Defines the virtualised resource performance metric. The
+         VNFM collects the performance metrics defined in this
+         attribute from the VIM using one or more PM Jobs.";
+      reference
+        "GS NFV IFA011: Section 7.1.11.3, MonitoringParameter
+         information element.";
     }
   }
-
 }
