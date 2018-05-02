@@ -3,11 +3,7 @@ submodule tailf-etsi-rel2-nfvo-ns {
     prefix nfvo-rel2;
   }
 
-  include tailf-etsi-rel2-nfvo-common {
-    revision-date 2017-01-20;
-  }
-
-  import ietf-inet-types { prefix inet; }
+  include tailf-etsi-rel2-nfvo-common;
 
   description
     "Models for NS according to ETSI GS NFV-IFA 014.";
@@ -324,7 +320,7 @@ submodule tailf-etsi-rel2-nfvo-ns {
             mandatory true;
           }
 
-          uses local-affinity-or-anti-affinity-rule-list;
+          uses local-affinity-or-anti-affinity-rule;
           list affinity-or-anti-affinity-group {
             key "id";
 
@@ -395,7 +391,7 @@ submodule tailf-etsi-rel2-nfvo-ns {
             }
           }
 
-          uses local-affinity-or-anti-affinity-rule-list;
+          uses local-affinity-or-anti-affinity-rule;
           list affinity-or-anti-affinity-group {
             key "id";
 
@@ -538,7 +534,7 @@ submodule tailf-etsi-rel2-nfvo-ns {
             type uint16;
             mandatory true;
           }
-          uses local-affinity-or-anti-affinity-rule-list;
+          uses local-affinity-or-anti-affinity-rule;
           list affinity-or-anti-affinity-group {
             key "id";
 
