@@ -1,6 +1,6 @@
-submodule tailf-etsi-rel2-nfvo-vnf {
-  belongs-to tailf-etsi-rel2-nfvo {
-    prefix nfvo-rel2;
+submodule etsi-nfvo-vnf {
+  belongs-to etsi-nfvo {
+    prefix nfvo;
   }
 
   import ietf-inet-types {
@@ -9,7 +9,8 @@ submodule tailf-etsi-rel2-nfvo-vnf {
   import ietf-yang-types {
     prefix yang;
   }
-  include tailf-etsi-rel2-nfvo-common;
+  include etsi-nfvo-common;
+  include etsi-nfvo-ns;
 
   description
     "Models for VNFD according to GS NFV-IFA 011.";
@@ -88,10 +89,10 @@ submodule tailf-etsi-rel2-nfvo-vnf {
            element.";
       }
       container l2-address-data {
-        when "../nfvo-rel2:address-type='mac-address'";
+        when "../nfvo:address-type='mac-address'";
       }
       container l3-address-data {
-        when "../nfvo-rel2:address-type='ip-address'";
+        when "../nfvo:address-type='ip-address'";
         leaf ip-address-assignment {
           type boolean;
           description
@@ -337,19 +338,16 @@ submodule tailf-etsi-rel2-nfvo-vnf {
                virtual link or to an external connection points.";
             leaf int-virtual-link-desc {
               type leafref {
-                path "../../../nfvo-rel2:virtual-link-descriptor/" +
-                     "nfvo-rel2:id";
+                path "../../../nfvo:virtual-link-desc/nfvo:id";
               }
               description
                 "Connect to an internal VLD.";
             }
-            leaf external-connection-point-descriptor {
+            leaf ext-cpd {
               description
                 "Connect to an external connection point";
               type leafref {
-                path "../../../nfvo-rel2:" +
-                     "external-connection-point-descriptor/" +
-                     "nfvo-rel2:id";
+                path "../../../nfvo:ext-cpd/nfvo:id";
               }
             }
           }
@@ -367,8 +365,8 @@ submodule tailf-etsi-rel2-nfvo-vnf {
         }
         leaf virtual-compute-desc {
           type leafref {
-            path "../../nfvo-rel2:virtual-compute-descriptor/" +
-                 "nfvo-rel2:id";
+            path "../../nfvo:virtual-compute-descriptor/" +
+                 "nfvo:id";
           }
           description
             "Describes CPU, Memory and acceleration requirements of
@@ -381,8 +379,8 @@ submodule tailf-etsi-rel2-nfvo-vnf {
         
         leaf-list virtual-storage-desc {
           type leafref {
-            path "../../nfvo-rel2:virtual-storage-descriptor/" +
-                 "nfvo-rel2:id";
+            path "../../nfvo:virtual-storage-descriptor/" +
+                 "nfvo:id";
           }
           description
             "Describes storage requirements for a VirtualStorage
@@ -398,7 +396,7 @@ submodule tailf-etsi-rel2-nfvo-vnf {
           key "virtual-storage-desc";
           leaf virtual-storage-desc {
             type leafref {
-              path "../../nfvo-rel2:virtual-storage-desc";
+              path "../../nfvo:virtual-storage-desc";
             }
           }
         }
@@ -805,7 +803,7 @@ submodule tailf-etsi-rel2-nfvo-vnf {
                  particular value is requested.";
             }
             container cpu-pinning-map {
-              when "../nfvo-rel2:cpu-pinning-policy = 'static'";
+              when "../nfvo:cpu-pinning-policy = 'static'";
             }
             description
               "If cpuPinningPolicy is defined as 'static', the
@@ -1000,7 +998,7 @@ submodule tailf-etsi-rel2-nfvo-vnf {
              Descriptor (CPD) connect. Either intVirtualLinkDesc or
              intCpd shall be present.";
           type leafref {
-            path "../../nfvo-rel2:virtual-link-descriptor/nfvo-rel2:id";
+            path "../../nfvo:virtual-link-desc/nfvo:id";
           }
         }
         /*
@@ -1012,8 +1010,8 @@ submodule tailf-etsi-rel2-nfvo-vnf {
         uses cpd;
       }
       list deployment-flavor {
-        must "nfvo-rel2:default-instantiation-level or " +
-             "count(nfvo-rel2:instantiation-level) = 1";
+        must "nfvo:default-instantiation-level or " +
+             "count(nfvo:instantiation-level) = 1";
         key "id";
         min-elements 1;
         description
@@ -1048,7 +1046,7 @@ submodule tailf-etsi-rel2-nfvo-vnf {
              to the DeploymentFlavor.";
           leaf id {
             type leafref {
-              path "../../../nfvo-rel2:vdu/nfvo-rel2:id";
+              path "../../../nfvo:vdu/nfvo:id";
             }
             reference
               "GS NFV IFA011: Section 7.1.8.3, VduProfile information
@@ -1067,7 +1065,7 @@ submodule tailf-etsi-rel2-nfvo-vnf {
           leaf max-number-of-instances {
             type uint16;
             mandatory true;
-            must ". >= ../nfvo-rel2:min-number-of-instances";
+            must ". >= ../nfvo:min-number-of-instances";
             reference
               "GS NFV IFA011: Section 7.1.8.3, VduProfile information
                element.";
@@ -1079,8 +1077,8 @@ submodule tailf-etsi-rel2-nfvo-vnf {
             leaf id {
               type leafref {
                 path "../../../" +
-                     "nfvo-rel2:affinity-or-anti-affinity-group/" +
-                     "nfvo-rel2:id";
+                     "nfvo:affinity-or-anti-affinity-group/" +
+                     "nfvo:id";
               }
             }
             description
@@ -1102,8 +1100,7 @@ submodule tailf-etsi-rel2-nfvo-vnf {
 
           leaf id {
             type leafref {
-              path "../../../nfvo-rel2:virtual-link-descriptor/" +
-                   "nfvo-rel2:id";
+              path "../../../nfvo:virtual-link-desc/nfvo:id";
             }
             description
               "Uniquely identifies a Vnf VLD.";
@@ -1113,8 +1110,8 @@ submodule tailf-etsi-rel2-nfvo-vnf {
           }
           leaf flavor {
             type leafref {
-              path "deref(../nfvo-rel2:virtual-link-descriptor)" +
-                   "/../nfvo-rel2:descriptor-flavor/nfvo-rel2:id";
+              path "deref(../nfvo:virtual-link-desc)" +
+                   "/../nfvo:descriptor-flavor/nfvo:id";
             }
             description
               "Identifies a flavour within the VnfVirtualLinkDesc.";
@@ -1128,8 +1125,8 @@ submodule tailf-etsi-rel2-nfvo-vnf {
             leaf id {
               type leafref {
                 path "../../../" +
-                     "nfvo-rel2:affinity-or-anti-affinity-group/" +
-                     "nfvo-rel2:id";
+                     "nfvo:affinity-or-anti-affinity-group/" +
+                     "nfvo:id";
               }
             }
             description
@@ -1186,7 +1183,7 @@ submodule tailf-etsi-rel2-nfvo-vnf {
                information element";
             leaf id {
               type leafref {
-                path "../../../../nfvo-rel2:vdu/nfvo-rel2:id";
+                path "../../../../nfvo:vdu/nfvo:id";
               }
               description
                 "Uniquely identifies a VDU.";
@@ -1197,11 +1194,11 @@ submodule tailf-etsi-rel2-nfvo-vnf {
             leaf number-of-instances {
               type uint16;
               must ". <= ../../../" +
-                   "nfvo-rel2:vdu-profile[vdu=current()/../" +
-                   "nfvo-rel2:vdu]/nfvo-rel2:max-number-of-instances";
+                   "nfvo:vdu-profile[vdu=current()/../" +
+                   "nfvo:vdu]/nfvo:max-number-of-instances";
               must ". >= ../../../" +
-                   "nfvo-rel2:vdu-profile[vdu=current()/../" +
-                   "nfvo-rel2:vdu]/nfvo-rel2:min-number-of-instances";
+                   "nfvo:vdu-profile[vdu=current()/../" +
+                   "nfvo:vdu]/nfvo:min-number-of-instances";
               mandatory true;
               description
                 "Number of instances of VNFC based on this VDU to
@@ -1223,7 +1220,7 @@ submodule tailf-etsi-rel2-nfvo-vnf {
                information element";
             leaf id {
               type leafref {
-                path "../../../nfvo-rel2:scaling-aspect/nfvo-rel2:id";
+                path "../../../nfvo:scaling-aspect/nfvo:id";
               }
               description
                 "Identifier of the scaling aspect.";
@@ -1243,7 +1240,7 @@ submodule tailf-etsi-rel2-nfvo-vnf {
         }
         leaf default-instantiation-level {
           type leafref {
-            path "../nfvo-rel2:instantiation-level/nfvo-rel2:id";
+            path "../nfvo:instantiation-level/nfvo:id";
           }
           description
             "This attribute references the 'instantiationLevel'
@@ -1470,7 +1467,7 @@ submodule tailf-etsi-rel2-nfvo-vnf {
           }
           leaf associated-group {
             type leafref {
-              path "../../../nfvo-rel2:element-group/nfvo-rel2:id";
+              path "../../../nfvo:element-group/nfvo:id";
             }
           }
           leaf max-scale-level {
@@ -1518,12 +1515,12 @@ submodule tailf-etsi-rel2-nfvo-vnf {
         }
         leaf-list vdu {
           type leafref {
-            path "../../nfvo-rel2:vdu/nfvo-rel2:id";
+            path "../../nfvo:vdu/nfvo:id";
           }
         }
-        leaf-list virtual-link-descriptor {
+        leaf-list virtual-link-desc {
           type leafref {
-            path "../../nfvo-rel2:virtual-link-descriptor/nfvo-rel2:id";
+            path "../../nfvo:virtual-link-desc/nfvo:id";
           }
         }
       }

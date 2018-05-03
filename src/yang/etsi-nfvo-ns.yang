@@ -1,9 +1,9 @@
-submodule tailf-etsi-rel2-nfvo-ns {
-  belongs-to tailf-etsi-rel2-nfvo {
-    prefix nfvo-rel2;
+submodule etsi-nfvo-ns {
+  belongs-to etsi-nfvo {
+    prefix nfvo;
   }
 
-  include tailf-etsi-rel2-nfvo-common;
+  include etsi-nfvo-common;
 
   description
     "Models for NS according to ETSI GS NFV-IFA 014.";
@@ -77,9 +77,9 @@ submodule tailf-etsi-rel2-nfvo-ns {
 
       leaf-list nested-nsd {
         type leafref {
-          path "../../nfvo-rel2:nsd/nfvo-rel2:id";
+          path "../../nfvo:nsd/nfvo:id";
         }
-        must ". != ../nfvo-rel2:id";
+        must ". != ../nfvo:id";
       }
 
       list vnfd {
@@ -90,7 +90,7 @@ submodule tailf-etsi-rel2-nfvo-ns {
            descriptor consists of.";
         leaf vnfd {
           type leafref {
-            path "/nfvo-rel2:nfvo/nfvo-rel2:vnfd/nfvo-rel2:id";
+            path "/nfvo/nfvo:vnfd/nfvo:id";
           }
         }
       }
@@ -129,9 +129,9 @@ submodule tailf-etsi-rel2-nfvo-ns {
         leaf role {
           type cp-role;
         }
-        leaf virtual-link-descriptor {
+        leaf virtual-link-desc {
           type leafref {
-            path "../../nfvo-rel2:virtual-link-descriptor/nfvo-rel2:id";
+            path "../../nfvo:virtual-link-desc/nfvo:id";
           }
           description
             "Can optionally connect this service-access-point to an virtual-link. If not set,
@@ -144,10 +144,10 @@ submodule tailf-etsi-rel2-nfvo-ns {
           vnf-profile -> sapd-connectivity
         */
       }
-      list virtual-link-descriptor {
+      list virtual-link-desc {
         key "id";
         description
-          "The virtual-link-descriptor information element provides general information
+          "The virtual-link-desc information element provides general information
            enabling the instantiation of virtual links.";
         leaf id {
           type string;
@@ -239,12 +239,12 @@ submodule tailf-etsi-rel2-nfvo-ns {
           container vnf-indicator {
             leaf vnfd {
               type leafref {
-                path "/nfvo-rel2:nfvo/nfvo-rel2:vnfd/nfvo-rel2:id";
+                path "/nfvo:nfvo/nfvo:vnfd/nfvo:id";
               }
             }
             leaf indicator {
               type leafref {
-                path "deref(../nfvo-rel2:vnfd)/../nfvo-rel2:indicator/nfvo-rel2:id";
+                path "deref(../nfvo:vnfd)/../nfvo:indicator/nfvo:id";
               }
             }
           }
@@ -264,7 +264,7 @@ submodule tailf-etsi-rel2-nfvo-ns {
       }
       list deployment-flavor {
         min-elements 1;
-        must "nfvo-rel2:default-instantiation-level or count(nfvo-rel2:instantiation-level) = 1";
+        must "nfvo:default-instantiation-level or count(nfvo:instantiation-level) = 1";
         key "id";
         description
           "The NsDf information element specifies the properties of a variant of an NS.";
@@ -275,13 +275,13 @@ submodule tailf-etsi-rel2-nfvo-ns {
 
         leaf flavor-key {
           type leafref {
-            path "../../nfvo-rel2:monitored-info/nfvo-rel2:id";
+            path "../../nfvo:monitored-info/nfvo:id";
           }
         }
 
         list vnf-profile {
-          must "nfvo-rel2:min-number-of-instances<=nfvo-rel2:max-number-of-instances";
-          must "count(../../nfvo-rel2:vnfd[vnfd=current()/nfvo-rel2:vnfd])=1" {
+          must "nfvo:min-number-of-instances<=nfvo:max-number-of-instances";
+          must "count(../../nfvo:vnfd[vnfd=current()/nfvo:vnfd])=1" {
             error-message "VNFDs in the profile has to be listed as a dependency of the network service descriptor.";
           }
           key "id";
@@ -293,21 +293,21 @@ submodule tailf-etsi-rel2-nfvo-ns {
           leaf vnfd {
             mandatory true;
             type leafref {
-              path "/nfvo-rel2:nfvo/nfvo-rel2:vnfd/nfvo-rel2:id";
+              path "/nfvo:nfvo/nfvo:vnfd/nfvo:id";
             }
           }
 
           leaf flavor {
             mandatory true;
             type leafref {
-              path "deref(../nfvo-rel2:vnfd)/../nfvo-rel2:deployment-flavor/nfvo-rel2:id";
+              path "deref(../nfvo:vnfd)/../nfvo:deployment-flavor/nfvo:id";
             }
           }
 
           leaf instantiation-level {
             mandatory true;
             type leafref {
-              path "deref(../nfvo-rel2:flavor)/../nfvo-rel2:instantiation-level/nfvo-rel2:id";
+              path "deref(../nfvo:flavor)/../nfvo:instantiation-level/nfvo:id";
             }
           }
 
@@ -326,7 +326,7 @@ submodule tailf-etsi-rel2-nfvo-ns {
 
             leaf id {
               type leafref {
-                path "../../../nfvo-rel2:affinity-or-anti-affinity-group/nfvo-rel2:id";
+                path "../../../nfvo:affinity-or-anti-affinity-group/nfvo:id";
               }
             }
           }
@@ -336,13 +336,13 @@ submodule tailf-etsi-rel2-nfvo-ns {
 
             leaf virtual-link-profile {
               type leafref {
-                path "../../../nfvo-rel2:virtual-link-profile/nfvo-rel2:virtual-link-descriptor";
+                path "../../../nfvo:virtual-link-profile/nfvo:virtual-link-desc";
               }
             }
 
             leaf cp {
               type leafref {
-                path "deref(../../nfvo-rel2:vnfd)/../nfvo-rel2:external-connection-point-descriptor/nfvo-rel2:id";
+                path "deref(../../nfvo:vnfd)/../nfvo:ext-cpd/nfvo:id";
               }
             }
           }
@@ -353,13 +353,13 @@ submodule tailf-etsi-rel2-nfvo-ns {
 
             leaf sapd {
               type leafref {
-                path "../../../../nfvo-rel2:service-access-point-descriptor/nfvo-rel2:id";
+                path "../../../../nfvo:service-access-point-descriptor/nfvo:id";
               }
             }
 
             leaf cp {
               type leafref {
-                path "deref(../../nfvo-rel2:vnfd)/../nfvo-rel2:external-connection-point-descriptor/nfvo-rel2:id";
+                path "deref(../../nfvo:vnfd)/../nfvo:ext-cpd/nfvo:id";
               }
             }
           }
@@ -369,25 +369,25 @@ submodule tailf-etsi-rel2-nfvo-ns {
           key "pnfd";
           leaf pnfd {
             type leafref {
-              path "../../../nfvo-rel2:pnfd";
+              path "../../../nfvo:pnfd";
             }
           }
           // no virtual-link-connectivity as we don't have PNFD modelled.
         }
 
         list virtual-link-profile {
-          key "virtual-link-descriptor";
-          leaf virtual-link-descriptor {
+          key "virtual-link-desc";
+          leaf virtual-link-desc {
             mandatory true;
             type leafref {
-              path "../../../nfvo-rel2:virtual-link-descriptor/nfvo-rel2:id";
+              path "../../../nfvo:virtual-link-desc/nfvo:id";
             }
           }
 
           leaf flavor {
             mandatory true;
             type leafref {
-              path "deref(../nfvo-rel2:virtual-link-descriptor)/../nfvo-rel2:deployment-flavor/nfvo-rel2:id";
+              path "deref(../nfvo:virtual-link-desc)/../nfvo:deployment-flavor/nfvo:id";
             }
           }
 
@@ -397,7 +397,7 @@ submodule tailf-etsi-rel2-nfvo-ns {
 
             leaf id {
               type leafref {
-                path "../../../nfvo-rel2:affinity-or-anti-affinity-group/nfvo-rel2:id";
+                path "../../../nfvo:affinity-or-anti-affinity-group/nfvo:id";
               }
             }
           }
@@ -423,7 +423,7 @@ submodule tailf-etsi-rel2-nfvo-ns {
           }
           leaf scaling-level {
             type leafref {
-              path "../../nfvo-rel2:instantiation-level/nfvo-rel2:id";
+              path "../../nfvo:instantiation-level/nfvo:id";
             }
           }
         }
@@ -463,7 +463,7 @@ submodule tailf-etsi-rel2-nfvo-ns {
 
             leaf vnf-profile {
               type leafref {
-                path "../../../nfvo-rel2:vnf-profile/nfvo-rel2:id";
+                path "../../../nfvo:vnf-profile/nfvo:id";
               }
             }
 
@@ -478,20 +478,20 @@ submodule tailf-etsi-rel2-nfvo-ns {
 
             leaf virtual-link-profile {
               type leafref {
-                path "../../../nfvo-rel2:virtual-link-profile/nfvo-rel2:virtual-link-descriptor";
+                path "../../../nfvo:virtual-link-profile/nfvo:virtual-link-desc";
               }
             }
 
             uses link-bitrate-requirements;
           }
 
-          must "(count(nfvo-rel2:vnf-to-level-mapping) + count(nfvo-rel2:vl-to-level-mapping)) > 0";
+          must "(count(nfvo:vnf-to-level-mapping) + count(nfvo:vl-to-level-mapping)) > 0";
 
           list ns-to-level-mapping {
             key "ns-profile";
             leaf ns-profile {
               type leafref {
-                path "../../../nfvo-rel2:ns-profile/nfvo-rel2:nsd";
+                path "../../../nfvo:ns-profile/nfvo:nsd";
               }
             }
 
@@ -504,26 +504,26 @@ submodule tailf-etsi-rel2-nfvo-ns {
 
         leaf default-instantiation-level {
           type leafref {
-            path "../nfvo-rel2:instantiation-level/nfvo-rel2:id";
+            path "../nfvo:instantiation-level/nfvo:id";
           }
         }
 
         list ns-profile {
-          must "nfvo-rel2:min-number-of-instances<=nfvo-rel2:max-number-of-instances";
+          must "nfvo:min-number-of-instances<=nfvo:max-number-of-instances";
           key "nsd";
           leaf nsd {
             type leafref {
-              path "../../../nfvo-rel2:nested-nsd";
+              path "../../../nfvo:nested-nsd";
             }
           }
           leaf deployment-flavor {
             type leafref {
-              path "/nfvo-rel2:nfvo/nfvo-rel2:nsd[id=current()/../nfvo-rel2:nsd]/nfvo-rel2:deployment-flavor/nfvo-rel2:id";
+              path "/nfvo:nfvo/nfvo:nsd[id=current()/../nfvo:nsd]/nfvo:deployment-flavor/nfvo:id";
             }
           }
           leaf instantiation-level {
             type leafref {
-              path "deref(../nfvo-rel2:deployment-flavor)/../nfvo-rel2:instantiation-level/nfvo-rel2:id";
+              path "deref(../nfvo:deployment-flavor)/../nfvo:instantiation-level/nfvo:id";
             }
           }
           leaf min-number-of-instances {
@@ -540,7 +540,7 @@ submodule tailf-etsi-rel2-nfvo-ns {
 
             leaf id {
               type leafref {
-                path "../../../nfvo-rel2:affinity-or-anti-affinity-group/nfvo-rel2:id";
+                path "../../../nfvo:affinity-or-anti-affinity-group/nfvo:id";
               }
             }
           }
@@ -560,24 +560,24 @@ submodule tailf-etsi-rel2-nfvo-ns {
           choice primary {
             leaf primary-vnf-profile {
               type leafref {
-                path "../../nfvo-rel2:vnf-profile/nfvo-rel2:vnfd";
+                path "../../nfvo:vnf-profile/nfvo:vnfd";
               }
             }
             leaf primary-ns-profile {
               type leafref {
-                path "../../nfvo-rel2:ns-profile/nfvo-rel2:nsd";
+                path "../../nfvo:ns-profile/nfvo:nsd";
               }
             }
           }
           choice secondary {
             leaf secondary-vnf-profile {
               type leafref {
-                path "../../nfvo-rel2:vnf-profile/nfvo-rel2:vnfd";
+                path "../../nfvo:vnf-profile/nfvo:vnfd";
               }
             }
             leaf secondary-ns-profile {
               type leafref {
-                path "../../nfvo-rel2:ns-profile/nfvo-rel2:nsd";
+                path "../../nfvo:ns-profile/nfvo:nsd";
               }
             }
           }

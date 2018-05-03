@@ -1,6 +1,6 @@
-submodule tailf-etsi-rel2-nfvo-common {
-  belongs-to tailf-etsi-rel2-nfvo {
-    prefix nfvo-rel2;
+submodule etsi-nfvo-common {
+  belongs-to etsi-nfvo {
+    prefix nfvo;
   }
 
   description

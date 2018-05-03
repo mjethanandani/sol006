@@ -1,10 +1,10 @@
-module tailf-etsi-rel2-nfvo {
-  namespace "http://tail-f.com/pkg/tailf-etsi-rel2-nfvo";
-  prefix nfvo-rel2;
+module etsi-nfvo {
+  namespace "urn:etsi:params:xml:ns:yang:etsi-nfvo";
+  prefix nfvo;
 
-  include tailf-etsi-rel2-nfvo-common;
-  include tailf-etsi-rel2-nfvo-vnf;
-  include tailf-etsi-rel2-nfvo-ns;
+  include etsi-nfvo-common;
+  include etsi-nfvo-vnf;
+  include etsi-nfvo-ns;
 
   organization
     "European Telecommunications Standards Institute (ETSI)";
