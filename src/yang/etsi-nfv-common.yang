@@ -1,6 +1,6 @@
-submodule etsi-nfvo-common {
-  belongs-to etsi-nfvo {
-    prefix nfvo;
+submodule etsi-nfv-common {
+  belongs-to etsi-nfv {
+    prefix nfv;
   }
 
   description

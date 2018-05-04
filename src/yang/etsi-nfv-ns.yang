@@ -1,9 +1,9 @@
-submodule etsi-nfvo-ns {
-  belongs-to etsi-nfvo {
-    prefix nfvo;
+submodule etsi-nfv-ns {
+  belongs-to etsi-nfv {
+    prefix nfv;
   }
 
-  include etsi-nfvo-common;
+  include etsi-nfv-common;
 
   description
     "Models for NS according to ETSI GS NFV-IFA 014.";
@@ -77,9 +77,9 @@ submodule etsi-nfvo-ns {
 
       leaf-list nested-nsd {
         type leafref {
-          path "../../nfvo:nsd/nfvo:id";
+          path "../../nfv:nsd/nfv:id";
         }
-        must ". != ../nfvo:id";
+        must ". != ../nfv:id";
       }
 
       list vnfd {
@@ -90,7 +90,7 @@ submodule etsi-nfvo-ns {
            descriptor consists of.";
         leaf vnfd {
           type leafref {
-            path "/nfvo/nfvo:vnfd/nfvo:id";
+            path "/nfv/nfv:vnfd/nfv:id";
           }
         }
       }
@@ -131,7 +131,7 @@ submodule etsi-nfvo-ns {
         }
         leaf virtual-link-desc {
           type leafref {
-            path "../../nfvo:virtual-link-desc/nfvo:id";
+            path "../../nfv:virtual-link-desc/nfv:id";
           }
           description
             "Can optionally connect this service-access-point to an virtual-link. If not set,
@@ -239,12 +239,12 @@ submodule etsi-nfvo-ns {
           container vnf-indicator {
             leaf vnfd {
               type leafref {
-                path "/nfvo:nfvo/nfvo:vnfd/nfvo:id";
+                path "/nfv:nfv/nfv:vnfd/nfv:id";
               }
             }
             leaf indicator {
               type leafref {
-                path "deref(../nfvo:vnfd)/../nfvo:indicator/nfvo:id";
+                path "deref(../nfv:vnfd)/../nfv:indicator/nfv:id";
               }
             }
           }
@@ -264,7 +264,7 @@ submodule etsi-nfvo-ns {
       }
       list deployment-flavor {
         min-elements 1;
-        must "nfvo:default-instantiation-level or count(nfvo:instantiation-level) = 1";
+        must "nfv:default-instantiation-level or count(nfv:instantiation-level) = 1";
         key "id";
         description
           "The NsDf information element specifies the properties of a variant of an NS.";
@@ -275,13 +275,13 @@ submodule etsi-nfvo-ns {
 
         leaf flavor-key {
           type leafref {
-            path "../../nfvo:monitored-info/nfvo:id";
+            path "../../nfv:monitored-info/nfv:id";
           }
         }
 
         list vnf-profile {
-          must "nfvo:min-number-of-instances<=nfvo:max-number-of-instances";
-          must "count(../../nfvo:vnfd[vnfd=current()/nfvo:vnfd])=1" {
+          must "nfv:min-number-of-instances<=nfv:max-number-of-instances";
+          must "count(../../nfv:vnfd[vnfd=current()/nfv:vnfd])=1" {
             error-message "VNFDs in the profile has to be listed as a dependency of the network service descriptor.";
           }
           key "id";
@@ -293,21 +293,21 @@ submodule etsi-nfvo-ns {
           leaf vnfd {
             mandatory true;
             type leafref {
-              path "/nfvo:nfvo/nfvo:vnfd/nfvo:id";
+              path "/nfv:nfv/nfv:vnfd/nfv:id";
             }
           }
 
           leaf flavor {
             mandatory true;
             type leafref {
-              path "deref(../nfvo:vnfd)/../nfvo:deployment-flavor/nfvo:id";
+              path "deref(../nfv:vnfd)/../nfv:deployment-flavor/nfv:id";
             }
           }
 
           leaf instantiation-level {
             mandatory true;
             type leafref {
-              path "deref(../nfvo:flavor)/../nfvo:instantiation-level/nfvo:id";
+              path "deref(../nfv:flavor)/../nfv:instantiation-level/nfv:id";
             }
           }
 
@@ -326,7 +326,7 @@ submodule etsi-nfvo-ns {
 
             leaf id {
               type leafref {
-                path "../../../nfvo:affinity-or-anti-affinity-group/nfvo:id";
+                path "../../../nfv:affinity-or-anti-affinity-group/nfv:id";
               }
             }
           }
@@ -336,13 +336,13 @@ submodule etsi-nfvo-ns {
 
             leaf virtual-link-profile {
               type leafref {
-                path "../../../nfvo:virtual-link-profile/nfvo:virtual-link-desc";
+                path "../../../nfv:virtual-link-profile/nfv:virtual-link-desc";
               }
             }
 
             leaf cp {
               type leafref {
-                path "deref(../../nfvo:vnfd)/../nfvo:ext-cpd/nfvo:id";
+                path "deref(../../nfv:vnfd)/../nfv:ext-cpd/nfv:id";
               }
             }
           }
@@ -353,13 +353,13 @@ submodule etsi-nfvo-ns {
 
             leaf sapd {
               type leafref {
-                path "../../../../nfvo:service-access-point-descriptor/nfvo:id";
+                path "../../../../nfv:service-access-point-descriptor/nfv:id";
               }
             }
 
             leaf cp {
               type leafref {
-                path "deref(../../nfvo:vnfd)/../nfvo:ext-cpd/nfvo:id";
+                path "deref(../../nfv:vnfd)/../nfv:ext-cpd/nfv:id";
               }
             }
           }
@@ -369,7 +369,7 @@ submodule etsi-nfvo-ns {
           key "pnfd";
           leaf pnfd {
             type leafref {
-              path "../../../nfvo:pnfd";
+              path "../../../nfv:pnfd";
             }
           }
           // no virtual-link-connectivity as we don't have PNFD modelled.
@@ -380,14 +380,14 @@ submodule etsi-nfvo-ns {
           leaf virtual-link-desc {
             mandatory true;
             type leafref {
-              path "../../../nfvo:virtual-link-desc/nfvo:id";
+              path "../../../nfv:virtual-link-desc/nfv:id";
             }
           }
 
           leaf flavor {
             mandatory true;
             type leafref {
-              path "deref(../nfvo:virtual-link-desc)/../nfvo:deployment-flavor/nfvo:id";
+              path "deref(../nfv:virtual-link-desc)/../nfv:deployment-flavor/nfv:id";
             }
           }
 
@@ -397,7 +397,7 @@ submodule etsi-nfvo-ns {
 
             leaf id {
               type leafref {
-                path "../../../nfvo:affinity-or-anti-affinity-group/nfvo:id";
+                path "../../../nfv:affinity-or-anti-affinity-group/nfv:id";
               }
             }
           }
@@ -423,7 +423,7 @@ submodule etsi-nfvo-ns {
           }
           leaf scaling-level {
             type leafref {
-              path "../../nfvo:instantiation-level/nfvo:id";
+              path "../../nfv:instantiation-level/nfv:id";
             }
           }
         }
@@ -463,7 +463,7 @@ submodule etsi-nfvo-ns {
 
             leaf vnf-profile {
               type leafref {
-                path "../../../nfvo:vnf-profile/nfvo:id";
+                path "../../../nfv:vnf-profile/nfv:id";
               }
             }
 
@@ -478,20 +478,20 @@ submodule etsi-nfvo-ns {
 
             leaf virtual-link-profile {
               type leafref {
-                path "../../../nfvo:virtual-link-profile/nfvo:virtual-link-desc";
+                path "../../../nfv:virtual-link-profile/nfv:virtual-link-desc";
               }
             }
 
             uses link-bitrate-requirements;
           }
 
-          must "(count(nfvo:vnf-to-level-mapping) + count(nfvo:vl-to-level-mapping)) > 0";
+          must "(count(nfv:vnf-to-level-mapping) + count(nfv:vl-to-level-mapping)) > 0";
 
           list ns-to-level-mapping {
             key "ns-profile";
             leaf ns-profile {
               type leafref {
-                path "../../../nfvo:ns-profile/nfvo:nsd";
+                path "../../../nfv:ns-profile/nfv:nsd";
               }
             }
 
@@ -504,26 +504,26 @@ submodule etsi-nfvo-ns {
 
         leaf default-instantiation-level {
           type leafref {
-            path "../nfvo:instantiation-level/nfvo:id";
+            path "../nfv:instantiation-level/nfv:id";
           }
         }
 
         list ns-profile {
-          must "nfvo:min-number-of-instances<=nfvo:max-number-of-instances";
+          must "nfv:min-number-of-instances<=nfv:max-number-of-instances";
           key "nsd";
           leaf nsd {
             type leafref {
-              path "../../../nfvo:nested-nsd";
+              path "../../../nfv:nested-nsd";
             }
           }
           leaf deployment-flavor {
             type leafref {
-              path "/nfvo:nfvo/nfvo:nsd[id=current()/../nfvo:nsd]/nfvo:deployment-flavor/nfvo:id";
+              path "/nfv:nfv/nfv:nsd[id=current()/../nfv:nsd]/nfv:deployment-flavor/nfv:id";
             }
           }
           leaf instantiation-level {
             type leafref {
-              path "deref(../nfvo:deployment-flavor)/../nfvo:instantiation-level/nfvo:id";
+              path "deref(../nfv:deployment-flavor)/../nfv:instantiation-level/nfv:id";
             }
           }
           leaf min-number-of-instances {
@@ -540,7 +540,7 @@ submodule etsi-nfvo-ns {
 
             leaf id {
               type leafref {
-                path "../../../nfvo:affinity-or-anti-affinity-group/nfvo:id";
+                path "../../../nfv:affinity-or-anti-affinity-group/nfv:id";
               }
             }
           }
@@ -560,24 +560,24 @@ submodule etsi-nfvo-ns {
           choice primary {
             leaf primary-vnf-profile {
               type leafref {
-                path "../../nfvo:vnf-profile/nfvo:vnfd";
+                path "../../nfv:vnf-profile/nfv:vnfd";
               }
             }
             leaf primary-ns-profile {
               type leafref {
-                path "../../nfvo:ns-profile/nfvo:nsd";
+                path "../../nfv:ns-profile/nfv:nsd";
               }
             }
           }
           choice secondary {
             leaf secondary-vnf-profile {
               type leafref {
-                path "../../nfvo:vnf-profile/nfvo:vnfd";
+                path "../../nfv:vnf-profile/nfv:vnfd";
               }
             }
             leaf secondary-ns-profile {
               type leafref {
-                path "../../nfvo:ns-profile/nfvo:nsd";
+                path "../../nfv:ns-profile/nfv:nsd";
               }
             }
           }

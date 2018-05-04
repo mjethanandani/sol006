@@ -1,10 +1,10 @@
-module etsi-nfvo {
-  namespace "urn:etsi:params:xml:ns:yang:etsi-nfvo";
-  prefix nfvo;
+module etsi-nfv {
+  namespace "urn:etsi:params:xml:ns:yang:etsi-nfv";
+  prefix nfv;
 
-  include etsi-nfvo-common;
-  include etsi-nfvo-vnf;
-  include etsi-nfvo-ns;
+  include etsi-nfv-common;
+  include etsi-nfv-vnf;
+  include etsi-nfv-ns;
 
   organization
     "European Telecommunications Standards Institute (ETSI)";
@@ -19,7 +19,7 @@ module etsi-nfvo {
        VNFD according to ETSI GS NFV-IFA 011 V2.1.1 (2016-10)";
   }
 
-  container nfvo {
+  container nfv {
     uses vnfd;
     uses nsd;
 
@@ -30,5 +30,5 @@ module etsi-nfvo {
     container onboarding {}
 
     container settings {}
- } // nfvo
+ } // nfv
 }
