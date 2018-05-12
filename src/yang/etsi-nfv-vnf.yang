@@ -623,6 +623,15 @@ submodule etsi-nfv-vnf {
           uses monitoring-parameter;
         }
         container configurable-properties {
+          leaf auto-scalable {
+            type boolean;
+          }
+          leaf auto-healable {
+            type boolean;
+          }
+          leaf additional-configurable-property {
+            type string;
+          }
         }
       }
       
@@ -1432,108 +1441,311 @@ submodule etsi-nfv-vnf {
         }
         list affinity-or-anti-affinity-group {
           key "id";
+          description
+            "The AffinityOrAntiAffinityGroup describes the affinity
+             or anti-affinity relationship applicable between the
+             virtualization containers to be created based on
+             different VDUs, or between internal VLs to be created
+             based on different VnfVirtualLinkDesc(s).
+
+             Per VNF, the affinity/anti-affinity rules defined using
+             this information element, using the
+             LocalAffinityOrAntiAffinityRule information element, and
+             using the placement constraints in the
+             GrantLifecycleOperation as defined in ETSI GS NFV-IFA
+             007 [i.3] should be conflict-free. In case of conflicts,
+             the placement constraints in the
+             GrantLifecycleOperation shall take precedence.";
+
+          reference
+            "GS NFV IFA011: Section 7.1.8.2 VnfDf information
+             element";
 
           leaf id {
             type string;
+            description
+              "Identifies an affinity or anti-affinity group to which
+               the affinity or anti-affinity rule applies.";
+            reference
+              "GS NFV IFA011: Section 7.1.8.12
+               AffinityOrAntiAffinityGroup information element";
           }
 
-          leaf affinity-type {
+          leaf type {
             mandatory true;
             type affinity-type;
+            description
+              "Specifies whether the rule is an affinity rule or an
+               anti-affinity rule.";
+            reference
+              "GS NFV IFA011: Section 7.1.8.12
+               AffinityOrAntiAffinityGroup information element";
           }
 
-          leaf affinity-scope {
+          leaf scope {
             mandatory true;
             type affinity-scope;
+            description
+              "Specifies the scope of the rule, possible values are
+               'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node'.";
+            reference
+              "GS NFV IFA011: Section 7.1.8.12
+               AffinityOrAntiAffinityGroup information element";
           }
         }
         list monitoring-parameter {
           key "id";
+
+          description
+            "Defines the virtualised resources monitoring parameters
+             on VNF level.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.2 VnfDf information
+             element";
+
           leaf id {
             type string;
+            description
+              "Unique identifier of the monitoring parameter.";
+            reference
+              "GS NFV IFA011: Section 7.1.11.3 MonitoringParameter
+               information element";
           }
           uses monitoring-parameter;
         }
+
         list scaling-aspect {
           key "id";
+
+          description
+            "The scaling aspects supported by this DF of the VNF.
+             scalingAspect shall be present if the VNF supports
+             scaling.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.2 VnfDf information
+             element";
+
           leaf id {
             type string;
+            description
+              "Unique identifier of this aspect in the VNFD.";
+            reference
+              "GS NFV IFA011: Section 7.1.10.2 ScalingAspect
+               information element";
           }
           leaf name {
             type string;
+            description
+              "Human readable name of the aspect.";
+            reference
+              "GS NFV IFA011: Section 7.1.10.2 ScalingAspect
+               information element";
           }
           leaf description {
             type string;
+            description
+              "Human readable description of the aspect.";
+            reference
+              "GS NFV IFA011: Section 7.1.10.2 ScalingAspect
+               information element";
           }
           leaf associated-group {
             type leafref {
               path "../../../nfv:element-group/nfv:id";
             }
+            description
+              "Reference to the group of Vnfd elements defining this
+               aspect. If present, scaling for this aspect is limited
+               to the elements of the group, but there is no
+               assumption that all the elements of the groups will be
+               increased at each step.";
+            reference
+              "GS NFV IFA011: Section 7.1.10.2 ScalingAspect
+               information element";
           }
           leaf max-scale-level {
             type uint32 {
               range "1..max";
             }
+            description
+              "The maximum scaleLevel for total number of scaling
+               steps that can be applied w.r.t. this aspect. The value
+               of this attribute corresponds to the number of scaling
+               steps can be applied to this aspect when scaling it
+               from the minimum scale level (i.e. 0) to the maximum
+               scale level defined by this attribute.";
+            reference
+              "GS NFV IFA011: Section 7.1.10.2 ScalingAspect
+               information element";
           }
         }
       }
+
       container configurable-properties {
+        description
+          "Describes the configurable properties of the VNF
+           (e.g. related to auto scaling and auto healing).";
+        reference
+          "GS NFV IFA011: Section 7.1.2 VNFD information element";
+
         leaf auto-scalable {
-          type empty;
+          type boolean;
+          description
+            "It permits to enable (TRUE) / disable (FALSE) the
+             auto-scaling functionality.";
+          reference
+            "GS NFV IFA011: Section 7.1.12 VnfConfigurableProperties
+             information element";
         }
         leaf auto-healable {
-          type empty;
+          type boolean;
+          description
+            "It permits to enable (TRUE) / disable (FALSE) the
+             auto-healing functionality.";
+          reference
+            "GS NFV IFA011: Section 7.1.12 VnfConfigurableProperties
+             information element";
         }
         leaf-list additional-configurable-property {
           type string;
+          description
+            "It provides VNF specific configurable properties that can
+             be modified using the ModifyVnfConfiguration operation.";
+          reference
+            "GS NFV IFA011: Section 7.1.12 VnfConfigurableProperties
+             information element";
         }
       }
       container modifiable-attributes {
+        description
+          "Describes the modifiable attributes of the VNF.";
+        reference
+          "GS NFV IFA011: Section 7.1.2 VNFD information element";
+
         leaf-list extension {
           type string;
+          description
+            "'Extension' attributes of VnfInfo that are writeable.";
+          reference
+            "GS NFV IFA011: Section 7.1.14 VnfInfoModifiableAttributes
+             information element";
         }
         leaf-list metadata {
           type string;
+          description
+            "'Metadata' attributes of VnfInfo that are writeable.";
+          reference
+            "GS NFV IFA011: Section 7.1.14 VnfInfoModifiableAttributes
+             information element";
         }
       }
       list lifecycle-management-script {
         key "event";
+        description
+          "Includes a list of events and corresponding management
+           scripts performed for the VNF.";
+        reference
+          "GS NFV IFA011: Section 7.1.2 VNFD information element";
+
         leaf event {
-          type string;
+          type lifecycle-management-script-event;
+          description
+            "Describes VNF lifecycle event(s) or an external stimulus
+             detected on a VNFM reference point.";
+          reference
+            "GS NFV IFA011: Section 7.1.13 LifeCycleManagementScript
+             information element";
         }
         leaf script {
           type string;
+          description
+            "Includes a VNF LCM script (e.g. written in a DSL as
+             specified in requirement VNF_PACK.LCM.001) triggered to
+             react to one of the events listed in the event
+             attribute.";
+          reference
+            "GS NFV IFA011: Section 7.1.13 LifeCycleManagementScript
+             information element";
         }
       }
       list element-group {
         key "id";
+        description
+          "Describes the associated elements of a VNFD for a certain
+           purpose during VNF lifecycle management.";
+        reference
+          "GS NFV IFA011: Section 7.1.2 VNFD information element";
+
         leaf id {
           type string;
+          description
+            "Unique identifier of this group in the VNFD.";
+          reference
+            "GS NFV IFA011: Section 7.1.4 VnfdElementGroup
+             information element";
         }
         leaf description {
           type string;
+          description
+            "Human readable description of the group.";
+          reference
+            "GS NFV IFA011: Section 7.1.4 VnfdElementGroup
+             information element";
         }
         leaf-list vdu {
           type leafref {
             path "../../nfv:vdu/nfv:id";
           }
+          description
+            "References to Vdus that are part of this group.";
+          reference
+            "GS NFV IFA011: Section 7.1.4 VnfdElementGroup
+             information element";
         }
         leaf-list virtual-link-desc {
           type leafref {
             path "../../nfv:virtual-link-desc/nfv:id";
           }
+          description
+            "References to VnfVirtualLinkDesc that are part of this
+             group.";
+          reference
+            "GS NFV IFA011: Section 7.1.4 VnfdElementGroup
+             information element";
         }
       }
       list indicator {
         key "id";
+        description
+          "Declares the VNF indicators that are supported by this
+           VNF.";
+        reference
+          "GS NFV IFA011: Section 7.1.2 VNFD information element";
+
         leaf id {
           type string;
+          description
+            "Unique identifier";
+          reference
+            "GS NFV IFA011: Section 7.1.11.2 VnfdIndicator
+             information element";
         }
         leaf name {
           type string;
+          description
+            "The human readable name of the VnfIndicator.";
+          reference
+            "GS NFV IFA011: Section 7.1.11.2 VnfdIndicator
+             information element";
         }
         leaf-list indicator-value {
           type string;
+          description
+            "Defines the allowed values or value ranges of this
+             indicator.";
+          reference
+            "GS NFV IFA011: Section 7.1.11.2 VnfdIndicator
+             information element";
         }
         leaf source {
           type enumeration {
@@ -1541,10 +1753,29 @@ submodule etsi-nfv-vnf {
             enum "EM";
             enum "both";
           }
+          description
+            "Describe the source of the indicator. The possible values
+             are:
+             • VNF.
+             • EM.
+             • Both.
+             This tells the consumer where to send the subscription
+             request.";
+          reference
+            "GS NFV IFA011: Section 7.1.11.2 VnfdIndicator
+             information element";
         }
       }
       leaf-list auto-scale {
         type string;
+        description
+          "Rule that determines when a scaling action needs to be
+           triggered on a VNF instance e.g. based on certain VNF
+           indicator values or VNF indicator value changes or a
+           combination of VNF indicator value(s) and monitoring
+           parameter(s).";
+        reference
+          "GS NFV IFA011: Section 7.1.2 VNFD information element";
       }
     }
   }

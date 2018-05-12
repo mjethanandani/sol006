@@ -94,6 +94,23 @@ submodule etsi-nfv-common {
     }
   }
 
+  typedef lifecycle-management-script-event {
+    type enumeration {
+      enum "start-instantiation";
+      enum "end-instantiation";
+      enum "start-scaling";
+      enum "end-scaling";
+      enum "start-healing";
+      enum "end-healing";
+      enum "start-termination";
+      enum "end-termination";
+      enum "start-vnf-flavor-change";
+      enum "end-vnf-flavor-change";
+      enum "start-vnf-operation-state-change";
+      enum "end-vnf-operation-state-change";
+    }
+  }
+
   grouping local-affinity-or-anti-affinity-rule {
     list local-affinity-or-anti-affinity-rule {
       key "affinity-type affinity-scope";
